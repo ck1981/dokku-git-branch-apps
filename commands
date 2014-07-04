@@ -48,7 +48,7 @@ case "$1" in
           # prereceive-feature $APP $FEATURE
         fi
         if [ ! -d $APP-$FEATURE ]; then
-          mkdir $APP-$FEATURE
+          mkdir -p $APP-$FEATURE/cache
         fi
         git_archive_all $APP $newrev | dokku receive $APP-$FEATURE | sed -u "s/^/"$'\e[1G'"/"
       fi

@@ -20,19 +20,18 @@ git_archive_all() {
 prereceive-feature() {
   APP=$1
   FEATURE=$2
-  APP_PATH=$DOKKU_ROOT/$APP
-  if [[ ! -d $APP_PATH-$FEATURE ]]; then
-    mkdir $APP_PATH-$FEATURE
-  fi
-  cp -rf $APP_PATH/* $APP_PATH-$FEATURE > /dev/null
-  git init --bare $APP_PATH-$FEATURE > /dev/null
-  PRERECEIVE_HOOK="$APP_PATH-$FEATURE/hooks/pre-receive"
-  cat > $PRERECEIVE_HOOK <<EOF
+  FEATURE_PATH=$DOKKU_ROOT/$APP-$FEATURE
+  if [[ ! -d $FEATURE_PATH ]]; then
+    mkdir $FEATURE_PATH
+    cp -rf $APP_PATH/* $FEATURE_PATH > /dev/null
+    PRERECEIVE_HOOK="$FEATURE_PATH/hooks/pre-receive"
+    cat > $PRERECEIVE_HOOK <<EOF
 #!/usr/bin/env bash
 set -e; set -o pipefail;
 cat | DOKKU_ROOT="$DOKKU_ROOT" dokku git-hook $APP $FEATURE
 EOF
-  chmod +x $PRERECEIVE_HOOK
+    chmod +x $PRERECEIVE_HOOK
+  fi
 }
 
 case "$1" in

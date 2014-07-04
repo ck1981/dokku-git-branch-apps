@@ -47,7 +47,7 @@ case "$1" in
           FEATURE="$(echo $refname | sed 's:refs/heads/::g; s:/:-:g')"
           # prereceive-feature $APP $FEATURE
         fi
-        git_archive_all $APP-$FEATURE $newrev | dokku receive $APP-$FEATURE | sed -u "s/^/"$'\e[1G'"/"
+        git_archive_all $APP $newrev | dokku receive $APP-$FEATURE | sed -u "s/^/"$'\e[1G'"/"
       fi
 
     done

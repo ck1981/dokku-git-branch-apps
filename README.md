@@ -6,4 +6,4 @@ Replacement for default dokku git plugin which allows to launch apps for differe
 TODO:
 -----
 
-Remove apps and repositories when branch is removed.
+Remove apps and their dirs when branch is removed.

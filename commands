@@ -24,18 +24,24 @@ case "$1" in
     FEATURE=$3
     while read oldrev newrev refname
     do
-      if [[ $refname = "refs/heads/master" ]] ; then
-        git_archive_all $APP $newrev | dokku receive $APP | sed -u "s/^/"$'\e[1G'"/"
-      else
+      APP_NAME=$APP
+      if [[ $refname != "refs/heads/master" ]] ; then
         if [ -z "$FEATURE" ]; then
           FEATURE="$(echo $refname | sed 's:refs/heads/::g; s:/:-:g')"
         fi
         if [ ! -d $DOKKU_ROOT/$APP-$FEATURE ]; then
           mkdir -p $DOKKU_ROOT/$APP-$FEATURE/cache
         fi
-        git_archive_all $APP $newrev | dokku receive $APP-$FEATURE | sed -u "s/^/"$'\e[1G'"/"
+        APP_NAME=$APP-$FEATURE
       fi
 
+      if [[ $newrev -eq 0 ]]
+        # if branch is deleted
+        dokku delete $APP_NAME
+      else
+        # create app from branch
+        git_archive_all $APP $newrev | dokku receive $APP_NAME | sed -u "s/^/"$'\e[1G'"/"
+      fi
     done
     ;;
 

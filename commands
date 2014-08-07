@@ -35,7 +35,7 @@ case "$1" in
         APP_NAME=$APP-$FEATURE
       fi
 
-      if [[ $newrev -eq 0 ]]
+      if [[ $newrev -eq 0 ]] ; then
         # if branch is deleted
         dokku delete $APP_NAME
       else
